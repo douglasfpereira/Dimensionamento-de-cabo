@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Dimensionamento de Cabos - NBR 5410</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    background: #f0f2f5;
+    color: #1c1e21;
+    padding: 20px;
+    line-height: 1.4;
+  }
+  header {
+    background: linear-gradient(90deg, #003a70, #0066cc);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 10px;
+    margin-bottom: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.2);
+  }
+  header h1 { font-size: 22px; margin-bottom: 4px; }
+  header p { font-size: 13px; opacity: .9; }
+  .container { max-width: 1400px; margin: 0 auto; }
+  .panel {
+    background: white;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  .panel h2 {
+    font-size: 16px;
+    color: #003a70;
+    margin-bottom: 12px;
+    border-bottom: 2px solid #0066cc;
+    padding-bottom: 6px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px 14px;
+  }
+  .form-grid label {
+    display: flex;
+    flex-direction: column;
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+    gap: 4px;
+  }
+  input, select {
+    padding: 6px 8px;
+    font-size: 13px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background: #fafafa;
+    font-weight: normal;
+  }
+  input:focus, select:focus {
+    outline: none;
+    border-color: #0066cc;
+    background: white;
+  }
+  .btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: .15s;
+  }
+  .btn-primary { background: #0066cc; color: white; }
+  .btn-primary:hover { background: #004fa3; }
+  .btn-danger { background: #d33; color: white; }
+  .btn-danger:hover { background: #b22; }
+  .btn-secondary { background: #6c757d; color: white; }
+  .btn-secondary:hover { background: #545b62; }
+  .btn-success { background: #28a745; color: white; }
+  .btn-success:hover { background: #1e7e34; }
+  .btn-row { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  th, td {
+    padding: 6px 7px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  th {
+    background: #003a70;
+    color: white;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  tbody tr:nth-child(even) { background: #f7f9fc; }
+  tbody tr:hover { background: #e8f0fc; }
+  .small { font-size: 11px; color: #666; }
+  .result-row {
+    background: #e7f3ff !important;
+    font-weight: 600;
+  }
+  .summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+  .summary-item {
+    background: #f0f6ff;
+    border-left: 4px solid #0066cc;
+    padding: 10px 12px;
+    border-radius: 6px;
+  }
+  .summary-item span { font-size: 11px; color: #666; display: block; }
+  .summary-item strong { font-size: 16px; color: #003a70; }
+  .tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+  }
+  .tag-ilum { background: #fff3cd; color: #856404; }
+  .tag-tug { background: #d4edda; color: #155724; }
+  .tag-tue { background: #d1ecf1; color: #0c5460; }
+  .tag-motor { background: #f8d7da; color: #721c24; }
+  .tag-outro { background: #e2e3e5; color: #41464b; }
+  .warn { color: #b00; font-weight: 700; }
+  .ok { color: #1e7e34; font-weight: 700; }
+  details summary { cursor: pointer; font-weight: 600; color: #003a70; }
+  details > div { margin-top: 8px; font-size: 12px; }
+  .btn-memoria {
+    background: #ffc107; color: #000; padding: 3px 8px; font-size: 11px;
+    border: none; border-radius: 4px; cursor: pointer; font-weight: 600;
+  }
+  .btn-memoria:hover { background: #e0a800; }
+  .memoria-row td {
+    background: #fffbea !important;
+    text-align: left;
+    padding: 12px 18px;
+    font-size: 12.5px;
+    border-left: 4px solid #ffc107;
+  }
+  .memoria-row h4 {
+    color: #003a70; margin-bottom: 6px; font-size: 13px;
+    border-bottom: 1px solid #ddd; padding-bottom: 3px;
+  }
+  .memoria-row .passo {
+    margin: 4px 0; padding-left: 12px;
+  }
+  .memoria-row .formula {
+    background: #f8f9fa; padding: 4px 8px; border-radius: 4px;
+    font-family: 'Consolas', monospace; display: inline-block; margin: 2px 0;
+  }
+  .memoria-row .conclusao {
+    background: #d1ecf1; padding: 6px 10px; border-radius: 5px;
+    margin-top: 6px; border-left: 3px solid #0c5460;
+  }
+  .alimentador-painel {
+    background: linear-gradient(135deg, #fff8e1, #fff3cd);
+    border-left: 5px solid #ff9800;
+  }
+  @media print {
+    body { background: white; padding: 0; }
+    .no-print { display: none !important; }
+    .panel { box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>Dimensionamento de Cabos e Quadro de Carga</h1>
+  <p>Baseado na ABNT NBR 5410:1997 - Instalações Elétricas de Baixa Tensão</p>
+</header>
+
+<div class="panel no-print">
+  <h2>1. Dados Gerais da Instalação</h2>
+  <div class="form-grid">
+    <label>Identificação do Projeto
+      <input type="text" id="projeto" value="Projeto Residencial 01">
+    </label>
+    <label>Tipo de Alimentação (Tabela 46)
+      <select id="tipoAlimentacao">
+        <option value="A">A - Ramal BT (rede pública) — limite 4%</option>
+        <option value="B">B - Subestação própria — limite 7%</option>
+        <option value="C">C - Fonte própria — limite 7%</option>
+      </select>
+    </label>
+    <label>Tensão Fase-Neutro (V)
+      <input type="number" id="tensaoFN" value="127" min="100">
+    </label>
+    <label>Tensão Fase-Fase (V)
+      <input type="number" id="tensaoFF" value="220" min="100">
+    </label>
+  </div>
+</div>
+
+<div class="panel no-print">
+  <h2>2. Adicionar Circuito</h2>
+  <div class="form-grid">
+    <label>Nº / Identificação
+      <input type="text" id="cId" placeholder="C1 - Iluminação Sala">
+    </label>
+    <label>Tipo de Circuito
+      <select id="cTipo">
+        <option value="ilum">Iluminação</option>
+        <option value="tug">Tomada Uso Geral (TUG)</option>
+        <option value="tue">Tomada Uso Específico (TUE)</option>
+        <option value="motor">Motor</option>
+        <option value="outro">Outro</option>
+      </select>
+    </label>
+    <label>Potência (VA)
+      <input type="number" id="cPotencia" value="1000" min="0" step="10">
+    </label>
+    <label>Fator de Potência
+      <input type="number" id="cFp" value="0.92" min="0.1" max="1" step="0.01">
+    </label>
+    <label>Sistema
+      <select id="cSistema">
+        <option value="mono">Monofásico (F+N+T)</option>
+        <option value="bif">Bifásico (F+F+T)</option>
+        <option value="bif3">Bifásico (F+F+N+T)</option>
+        <option value="trif">Trifásico (3F+T)</option>
+        <option value="trif4">Trifásico (3F+N+T)</option>
+      </select>
+    </label>
+    <label>Comprimento (m)
+      <input type="number" id="cComprimento" value="15" min="0.5" step="0.5">
+    </label>
+    <label>Condutor
+      <select id="cCondutor">
+        <option value="Cu">Cobre</option>
+        <option value="Al">Alumínio</option>
+      </select>
+    </label>
+    <label>Isolação
+      <select id="cIsolacao">
+        <option value="PVC">PVC (70°C)</option>
+        <option value="EPR">EPR/XLPE (90°C)</option>
+      </select>
+    </label>
+    <label>Método de Referência (Tab. 28)
+      <select id="cMetodo">
+        <option value="B1">B1 - Cond. isolados em eletroduto em parede</option>
+        <option value="B2">B2 - Cabo multipolar em eletroduto em parede</option>
+        <option value="A1">A1 - Eletroduto em parede isolante</option>
+        <option value="A2">A2 - Cabo multipolar em parede isolante</option>
+        <option value="C">C - Cabos sobre parede de madeira</option>
+        <option value="D">D - Cabo em eletroduto enterrado</option>
+        <option value="E">E - Cabo multipolar ao ar livre</option>
+        <option value="F">F - Cabos unipolares justapostos ao ar livre</option>
+        <option value="G">G - Cabos unipolares espaçados ao ar livre</option>
+      </select>
+    </label>
+    <label>Temp. Ambiente (°C)
+      <input type="number" id="cTemp" value="30" min="10" max="80" step="5">
+    </label>
+    <label>Nº de Circuitos Agrupados
+      <input type="number" id="cAgrup" value="1" min="1" max="20" step="1">
+    </label>
+    <label>Queda de Tensão Máx. (%)
+      <input type="number" id="cQuedaMax" value="4" min="1" max="10" step="0.5">
+    </label>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="addCircuito()">➕ Adicionar Circuito</button>
+    <button class="btn btn-secondary" onclick="preencherExemplo()">📝 Preencher Exemplo Residencial</button>
+    <button class="btn btn-danger" onclick="limparTudo()">🗑️ Limpar Todos</button>
+  </div>
+</div>
+
+<div class="panel alimentador-painel no-print">
+  <h2>3. Cabo Alimentador (Entrada do Quadro)</h2>
+  <div class="form-grid">
+    <label>Comprimento do alimentador (m)
+      <input type="number" id="aComprimento" value="20" min="0.5" step="0.5">
+    </label>
+    <label>Sistema do alimentador
+      <select id="aSistema">
+        <option value="mono">Monofásico (F+N+T)</option>
+        <option value="bif">Bifásico (F+F+T)</option>
+        <option value="bif3">Bifásico (F+F+N+T)</option>
+        <option value="trif">Trifásico (3F+T)</option>
+        <option value="trif4" selected>Trifásico (3F+N+T)</option>
+      </select>
+    </label>
+    <label>Condutor
+      <select id="aCondutor">
+        <option value="Cu">Cobre</option>
+        <option value="Al">Alumínio</option>
+      </select>
+    </label>
+    <label>Isolação
+      <select id="aIsolacao">
+        <option value="PVC">PVC (70°C)</option>
+        <option value="EPR">EPR/XLPE (90°C)</option>
+      </select>
+    </label>
+    <label>Método (Tab. 28)
+      <select id="aMetodo">
+        <option value="B1">B1 - Eletroduto em parede</option>
+        <option value="B2">B2 - Cabo multipolar em eletroduto</option>
+        <option value="C">C - Sobre parede</option>
+        <option value="D">D - Eletroduto enterrado</option>
+        <option value="E">E - Multipolar ao ar livre</option>
+        <option value="F">F - Unipolares justapostos</option>
+      </select>
+    </label>
+    <label>Temp. Ambiente (°C)
+      <input type="number" id="aTemp" value="30" min="10" max="80" step="5">
+    </label>
+    <label>Queda máx. permitida (%)
+      <input type="number" id="aQuedaMax" value="4" min="1" max="10" step="0.5">
+    </label>
+    <label>Fator de Pot. médio
+      <input type="number" id="aFp" value="0.92" min="0.1" max="1" step="0.01">
+    </label>
+    <label>FD Iluminação + TUG
+      <input type="number" id="aFdItug" value="1.0" min="0.1" max="1" step="0.05" title="Fator de demanda iluminação/tomadas">
+    </label>
+    <label>FD TUE
+      <input type="number" id="aFdTue" value="1.0" min="0.1" max="1" step="0.05" title="Fator de demanda tomadas de uso específico">
+    </label>
+    <label>FD Motor
+      <input type="number" id="aFdMotor" value="1.0" min="0.1" max="1" step="0.05" title="Fator de demanda motores">
+    </label>
+  </div>
+  <div class="btn-row">
+    <button class="btn btn-primary" onclick="renderizar()">🔄 Recalcular Alimentador</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>4. Quadro de Carga — Circuitos Dimensionados</h2>
+  <div style="overflow-x:auto">
+  <table id="quadroCargas">
+    <thead>
+      <tr>
+        <th>Circuito</th>
+        <th>Tipo</th>
+        <th>Pot.<br>(VA)</th>
+        <th>FP</th>
+        <th>Sist.</th>
+        <th>Tensão<br>(V)</th>
+        <th>I<sub>B</sub><br>(A)</th>
+        <th>L<br>(m)</th>
+        <th>Mét.</th>
+        <th>FCT<br>°C</th>
+        <th>FCA<br>agrup.</th>
+        <th>I'<sub>z</sub><br>req.(A)</th>
+        <th>S corr.<br>(mm²)</th>
+        <th>S queda<br>(mm²)</th>
+        <th><strong>S adot.<br>(mm²)</strong></th>
+        <th>Neutro<br>(mm²)</th>
+        <th>PE<br>(mm²)</th>
+        <th>ΔV<br>(%)</th>
+        <th>Disjuntor<br>(A)</th>
+        <th>Eletrod.<br>(mm)</th>
+        <th>Memória</th>
+        <th class="no-print">Ações</th>
+      </tr>
+    </thead>
+    <tbody id="tbodyCircuitos">
+      <tr><td colspan="22" style="padding:24px;color:#888">Nenhum circuito adicionado. Use o formulário acima ou clique em "Preencher Exemplo".</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<div class="panel">
+  <h2>5. Resumo Geral / Totais</h2>
+  <div class="summary" id="resumo">
+    <div class="summary-item"><span>Potência Total Instalada</span><strong id="rTotalVA">0 VA</strong></div>
+    <div class="summary-item"><span>Potência Ativa Total</span><strong id="rTotalW">0 W</strong></div>
+    <div class="summary-item"><span>Demanda Total (com FD)</span><strong id="rDemanda">0 VA</strong></div>
+    <div class="summary-item"><span>Corrente Demandada</span><strong id="rIDemanda">0 A</strong></div>
+    <div class="summary-item"><span>Nº de Circuitos</span><strong id="rNum">0</strong></div>
+    <div class="summary-item"><span>Disjuntor Geral Sugerido</span><strong id="rDjGeral">-</strong></div>
+    <div class="summary-item"><span>Seção do Alimentador</span><strong id="rAlim">-</strong></div>
+  </div>
+</div>
+
+<div class="panel" id="painelAlimentador" style="display:none">
+  <h2>6. Dimensionamento do Cabo Alimentador (Memória de Cálculo)</h2>
+  <div id="memoriaAlimentador"></div>
+</div>
+
+<div class="panel">
+  <h2>7. Critérios de Dimensionamento (NBR 5410)</h2>
+  <details open>
+    <summary>Como o aplicativo dimensiona cada circuito</summary>
+    <div>
+      <p><b>Corrente de projeto (I<sub>B</sub>):</b></p>
+      <ul style="margin-left:20px">
+        <li>Monofásico: I<sub>B</sub> = P / (V × FP)</li>
+        <li>Bifásico (F+F): I<sub>B</sub> = P / (V<sub>FF</sub> × FP)</li>
+        <li>Trifásico: I<sub>B</sub> = P / (√3 × V<sub>FF</sub> × FP)</li>
+      </ul>
+      <p style="margin-top:6px"><b>Capacidade requerida:</b> I'<sub>z</sub> = I<sub>B</sub> / (FCT × FCA)</p>
+      <p>Onde FCT (Tabela 35) corrige por temperatura e FCA (Tabela 37) por agrupamento.</p>
+      <p style="margin-top:6px"><b>Seção adotada:</b> maior entre:</p>
+      <ul style="margin-left:20px">
+        <li>Critério da capacidade de corrente (Tabelas 31 a 34)</li>
+        <li>Critério da queda de tensão (Tabela 46): 4% (ramal BT) ou 7% (subestação)</li>
+        <li>Seção mínima (Tabela 43): 1,5 mm² (iluminação) / 2,5 mm² (força/tomadas)</li>
+      </ul>
+      <p style="margin-top:6px"><b>Condutor neutro</b> (Tabela 44) e <b>condutor de proteção (PE)</b> dimensionados conforme item 6.4 da norma.</p>
+    </div>
+  </details>
+  <div class="btn-row no-print">
+    <button class="btn btn-success" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    <button class="btn btn-secondary" onclick="exportarCSV()">📊 Exportar CSV</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+/* ============================================================
+   TABELAS DA NBR 5410:1997
+   ============================================================ */
+
+// Seções comerciais (mm²)
+const SECOES = [1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240, 300, 400, 500, 630];
+
+// Tabela 31 - PVC 70°C - Cobre - colunas por método e nº cond. carregados
+// Estrutura: SECOES[i] -> {metodo: [I_2cond, I_3cond]}
+const TAB31_CU_PVC = {
+  1.5:  {A1:[14.5,13.5], A2:[14,13],   B1:[17.5,15.5], B2:[16.5,15], C:[19.5,17.5], D:[22,18]},
+  2.5:  {A1:[19.5,18],   A2:[18.5,17.5],B1:[24,21],    B2:[23,20],   C:[27,24],     D:[29,24]},
+  4:    {A1:[26,24],     A2:[25,23],   B1:[32,28],    B2:[30,27],   C:[36,32],     D:[38,31]},
+  6:    {A1:[34,31],     A2:[32,29],   B1:[41,36],    B2:[38,34],   C:[46,41],     D:[47,39]},
+  10:   {A1:[46,42],     A2:[43,39],   B1:[57,50],    B2:[52,46],   C:[63,57],     D:[63,52]},
+  16:   {A1:[61,56],     A2:[57,52],   B1:[76,68],    B2:[69,62],   C:[85,76],     D:[81,67]},
+  25:   {A1:[80,73],     A2:[75,68],   B1:[101,89],   B2:[90,80],   C:[112,96],    D:[104,86]},
+  35:   {A1:[99,89],     A2:[92,83],   B1:[125,110],  B2:[111,99],  C:[138,119],   D:[125,103]},
+  50:   {A1:[119,108],   A2:[110,99],  B1:[151,134],  B2:[133,118], C:[168,144],   D:[148,122]},
+  70:   {A1:[151,136],   A2:[139,125], B1:[192,171],  B2:[168,149], C:[213,184],   D:[183,151]},
+  95:   {A1:[182,164],   A2:[167,150], B1:[232,207],  B2:[201,179], C:[258,223],   D:[216,179]},
+  120:  {A1:[210,188],   A2:[192,172], B1:[269,239],  B2:[232,206], C:[299,259],   D:[246,203]},
+  150:  {A1:[240,216],   A2:[219,196], B1:[309,275],  B2:[265,236], C:[344,299],   D:[278,230]},
+  185:  {A1:[273,245],   A2:[248,223], B1:[353,314],  B2:[300,268], C:[392,341],   D:[312,258]},
+  240:  {A1:[321,286],   A2:[291,261], B1:[415,370],  B2:[351,313], C:[461,403],   D:[361,297]},
+  300:  {A1:[367,328],   A2:[334,298], B1:[477,426],  B2:[401,358], C:[530,464],   D:[408,336]},
+  400:  {A1:[438,390],   A2:[398,355], B1:[571,510],  B2:[477,425], C:[634,557],   D:[478,394]},
+  500:  {A1:[502,447],   A2:[456,406], B1:[656,587],  B2:[545,486], C:[729,642],   D:[540,445]},
+  630:  {A1:[578,514],   A2:[526,467], B1:[758,678],  B2:[626,559], C:[843,743],   D:[614,506]}
+};
+
+// Tabela 32 - EPR/XLPE 90°C - Cobre
+const TAB32_CU_EPR = {
+  1.5:  {A1:[19,17],     A2:[18.5,16.5],B1:[23,20],    B2:[22,19.5], C:[24,22],     D:[26,22]},
+  2.5:  {A1:[26,23],     A2:[25,22],   B1:[31,28],    B2:[30,26],   C:[33,30],     D:[34,29]},
+  4:    {A1:[35,31],     A2:[33,30],   B1:[42,37],    B2:[40,35],   C:[45,40],     D:[44,37]},
+  6:    {A1:[45,40],     A2:[42,38],   B1:[54,48],    B2:[51,44],   C:[58,52],     D:[56,46]},
+  10:   {A1:[61,54],     A2:[57,51],   B1:[75,66],    B2:[69,60],   C:[80,71],     D:[73,61]},
+  16:   {A1:[81,73],     A2:[76,68],   B1:[100,88],   B2:[91,80],   C:[107,96],    D:[95,79]},
+  25:   {A1:[106,95],    A2:[99,89],   B1:[133,117],  B2:[119,105], C:[138,119],   D:[121,101]},
+  35:   {A1:[131,117],   A2:[121,109], B1:[164,144],  B2:[146,128], C:[171,147],   D:[146,122]},
+  50:   {A1:[158,141],   A2:[145,130], B1:[198,175],  B2:[175,154], C:[209,179],   D:[173,144]},
+  70:   {A1:[200,179],   A2:[183,164], B1:[253,222],  B2:[221,194], C:[269,229],   D:[213,178]},
+  95:   {A1:[241,216],   A2:[220,197], B1:[306,269],  B2:[265,233], C:[328,278],   D:[252,211]},
+  120:  {A1:[278,249],   A2:[253,227], B1:[354,312],  B2:[305,268], C:[382,322],   D:[287,240]},
+  150:  {A1:[318,285],   A2:[290,259], B1:[407,358],  B2:[349,307], C:[441,371],   D:[324,271]},
+  185:  {A1:[362,324],   A2:[329,295], B1:[464,408],  B2:[395,348], C:[506,424],   D:[363,304]},
+  240:  {A1:[424,380],   A2:[386,346], B1:[546,481],  B2:[462,407], C:[599,500],   D:[419,351]},
+  300:  {A1:[486,435],   A2:[442,396], B1:[628,553],  B2:[529,465], C:[693,576],   D:[474,396]},
+  400:  {A1:[579,519],   A2:[527,472], B1:[751,661],  B2:[628,552], C:[835,692],   D:[555,464]},
+  500:  {A1:[664,595],   A2:[604,541], B1:[864,760],  B2:[718,631], C:[966,797],   D:[627,525]},
+  630:  {A1:[765,685],   A2:[696,623], B1:[998,879],  B2:[825,725], C:[1122,923],  D:[711,596]}
+};
+
+// Tabela 33 - PVC 70°C - métodos E,F,G - Cobre
+const TAB33_CU_PVC = {
+  1.5:  {E:[22,18.5],   F:[22,17,18],   G:[24,21]},
+  2.5:  {E:[30,25],     F:[31,24,25],   G:[34,29]},
+  4:    {E:[40,34],     F:[41,33,34],   G:[45,39]},
+  6:    {E:[51,43],     F:[53,43,45],   G:[59,51]},
+  10:   {E:[70,60],     F:[73,60,63],   G:[81,71]},
+  16:   {E:[94,80],     F:[99,82,85],   G:[110,97]},
+  25:   {E:[119,101],   F:[131,110,114],G:[146,130]},
+  35:   {E:[148,126],   F:[162,137,143],G:[181,162]},
+  50:   {E:[180,153],   F:[196,167,174],G:[219,197]},
+  70:   {E:[232,196],   F:[251,216,225],G:[281,254]},
+  95:   {E:[282,238],   F:[304,264,275],G:[341,311]},
+  120:  {E:[328,276],   F:[352,308,321],G:[396,362]},
+  150:  {E:[379,319],   F:[406,356,372],G:[456,419]},
+  185:  {E:[434,364],   F:[463,409,427],G:[521,480]},
+  240:  {E:[514,430],   F:[546,485,507],G:[615,569]},
+  300:  {E:[593,497],   F:[629,561,587],G:[709,659]}
+};
+
+// Tabela 34 - EPR/XLPE 90°C - métodos E,F,G - Cobre
+const TAB34_CU_EPR = {
+  1.5:  {E:[26,23],     F:[27,21,22],   G:[30,25]},
+  2.5:  {E:[36,32],     F:[37,29,30],   G:[41,35]},
+  4:    {E:[49,42],     F:[50,40,40],   G:[56,48]},
+  6:    {E:[63,54],     F:[65,53,55],   G:[73,63]},
+  10:   {E:[86,75],     F:[90,74,77],   G:[101,88]},
+  16:   {E:[115,100],   F:[121,101,105],G:[137,120]},
+  25:   {E:[149,127],   F:[161,135,141],G:[182,161]},
+  35:   {E:[185,158],   F:[200,169,176],G:[226,201]},
+  50:   {E:[225,192],   F:[242,207,216],G:[275,246]},
+  70:   {E:[289,246],   F:[310,268,279],G:[353,318]},
+  95:   {E:[352,298],   F:[377,328,342],G:[430,389]},
+  120:  {E:[410,346],   F:[437,383,400],G:[500,454]},
+  150:  {E:[473,399],   F:[504,444,464],G:[577,527]},
+  185:  {E:[542,456],   F:[575,510,533],G:[661,605]},
+  240:  {E:[641,538],   F:[679,607,634],G:[781,719]},
+  300:  {E:[741,621],   F:[783,703,736],G:[902,833]}
+};
+
+// Tabela 35 - Fator de Correção de Temperatura (FCT)
+const FCT = {
+  PVC: {10:1.22,15:1.17,20:1.12,25:1.06,30:1.00,35:0.94,40:0.87,45:0.79,50:0.71,55:0.61,60:0.50},
+  EPR: {10:1.15,15:1.12,20:1.08,25:1.04,30:1.00,35:0.96,40:0.91,45:0.87,50:0.82,55:0.76,60:0.71,65:0.65,70:0.58,75:0.50,80:0.41}
+};
+
+// Tabela 37 - Fator de Correção por Agrupamento (FCA) - feixe/eletroduto
+const FCA_AGRUP = {1:1.00,2:0.80,3:0.70,4:0.65,5:0.60,6:0.57,7:0.54,8:0.52,9:0.50,10:0.50,11:0.50,12:0.45};
+
+// Tabela 43 - Seções mínimas
+const SECAO_MIN = {ilum:1.5, tug:2.5, tue:2.5, motor:2.5, outro:2.5};
+
+// Tabela 44 - Seção do condutor neutro
+function secaoNeutro(s) {
+  if (s <= 25) return s;
+  const map = {35:25,50:25,70:35,95:50,120:70,150:70,185:95,240:120,300:150,400:185,500:240,630:300};
+  return map[s] || Math.ceil(s/2);
+}
+
+// Condutor de Proteção (PE) - item 6.4.3.1
+function secaoPE(s) {
+  if (s <= 16) return s;
+  if (s <= 35) return 16;
+  return Math.ceil(s/2);
+}
+
+// Disjuntores comerciais (A)
+const DISJUNTORES = [2,4,6,10,15,16,20,25,32,40,50,63,70,80,100,125,150,175,200,225,250,300,350,400,500,630,800,1000];
+
+// Eletrodutos (mm) - PVC rígido aproximado pela taxa de ocupação NBR 5410
+const ELETRODUTOS = [16,20,25,32,40,50,60,75,85,100];
+
+// Resistividade do cobre (Ω·mm²/m) a 70°C
+const RHO_CU = 1/56 * (1 + 0.004*(70-20));  // ~0.0223
+const RHO_AL = 1/35 * (1 + 0.004*(70-20));  // ~0.0357
+
+/* ============================================================
+   FUNÇÕES DE CÁLCULO
+   ============================================================ */
+
+function getAmpacidade(metodo, secao, isolacao, condutor, ncond) {
+  let tab;
+  if (['A1','A2','B1','B2','C','D'].includes(metodo)) {
+    tab = isolacao === 'PVC' ? TAB31_CU_PVC : TAB32_CU_EPR;
+    if (!tab[secao]) return null;
+    const arr = tab[secao][metodo];
+    if (!arr) return null;
+    return ncond === 2 ? arr[0] : arr[1];
+  } else {
+    tab = isolacao === 'PVC' ? TAB33_CU_PVC : TAB34_CU_EPR;
+    if (!tab[secao]) return null;
+    const arr = tab[secao][metodo];
+    if (!arr) return null;
+    return ncond === 2 ? arr[0] : arr[1];
+  }
+}
+
+function getFCT(temp, isolacao) {
+  const tabela = FCT[isolacao];
+  const temps = Object.keys(tabela).map(Number).sort((a,b)=>a-b);
+  // interpolação linear simples
+  if (temp <= temps[0]) return tabela[temps[0]];
+  if (temp >= temps[temps.length-1]) return tabela[temps[temps.length-1]];
+  for (let i = 0; i < temps.length-1; i++) {
+    if (temp >= temps[i] && temp <= temps[i+1]) {
+      const t1 = temps[i], t2 = temps[i+1];
+      const v1 = tabela[t1], v2 = tabela[t2];
+      return v1 + (v2-v1)*(temp-t1)/(t2-t1);
+    }
+  }
+  return 1.0;
+}
+
+function getFCA(n) {
+  if (n <= 1) return 1.0;
+  if (n >= 12) return 0.45;
+  return FCA_AGRUP[n] || 0.50;
+}
+
+function calcularCorrente(c) {
+  const V = (c.sistema === 'mono') ? parseFloat(document.getElementById('tensaoFN').value)
+          : parseFloat(document.getElementById('tensaoFF').value);
+  let I;
+  if (c.sistema === 'trif' || c.sistema === 'trif4') {
+    I = c.potencia / (Math.sqrt(3) * V * c.fp);
+  } else {
+    I = c.potencia / (V * c.fp);
+  }
+  return {I, V};
+}
+
+function numCondCarregados(sistema) {
+  // Para dimensionamento térmico: 2 ou 3 condutores carregados
+  if (sistema === 'mono' || sistema === 'bif') return 2;
+  return 3;
+}
+
+function dimensionarPorCorrente(c, Ib) {
+  const fct = getFCT(c.temp, c.isolacao);
+  const fca = getFCA(c.agrup);
+  const izReq = Ib / (fct * fca);
+  const ncond = numCondCarregados(c.sistema);
+  const secaoMinimaTipo = SECAO_MIN[c.tipo];
+
+  for (const s of SECOES) {
+    if (s < secaoMinimaTipo) continue;
+    const iz = getAmpacidade(c.metodo, s, c.isolacao, c.condutor, ncond);
+    if (iz && iz >= izReq) {
+      return {secao: s, iz, izReq, fct, fca};
+    }
+  }
+  return {secao: null, iz: null, izReq, fct, fca};
+}
+
+function calcularQuedaTensao(c, secao, Ib, V) {
+  const rho = c.condutor === 'Cu' ? RHO_CU : RHO_AL;
+  let dV, dVperc;
+  if (c.sistema === 'trif' || c.sistema === 'trif4') {
+    // Trifásico: ΔV = √3 × I × (R·cosφ + X·senφ) × L  (X≈0 para BT < 6mm²; simplif: R = ρL/S)
+    dV = Math.sqrt(3) * Ib * (rho * c.comprimento / secao) * c.fp;
+  } else {
+    // Mono/Bif: ΔV = 2 × I × R × cosφ
+    dV = 2 * Ib * (rho * c.comprimento / secao) * c.fp;
+  }
+  dVperc = (dV / V) * 100;
+  return {dV, dVperc};
+}
+
+function dimensionarPorQueda(c, Ib, V, quedaMax) {
+  const secaoMinimaTipo = SECAO_MIN[c.tipo];
+  for (const s of SECOES) {
+    if (s < secaoMinimaTipo) continue;
+    const {dVperc} = calcularQuedaTensao(c, s, Ib, V);
+    if (dVperc <= quedaMax) return {secao: s, dVperc};
+  }
+  return {secao: null, dVperc: null};
+}
+
+function escolherDisjuntor(Ib, Iz) {
+  // NBR 5410: Ib ≤ In ≤ Iz
+  for (const d of DISJUNTORES) {
+    if (d >= Ib && d <= Iz) return d;
+  }
+  for (const d of DISJUNTORES) if (d >= Ib) return d;
+  return null;
+}
+
+function escolherEletroduto(secao, ncond) {
+  // Estimativa simplificada (taxa de ocupação 40% — NBR 5410 item 6.2.11.1.3)
+  // Área aproximada do cabo isolado (mm²): A_cabo = π/4 × (d_externo)²
+  // Aproximação prática:
+  const diametroExt = { 1.5:3.0, 2.5:3.5, 4:4.0, 6:4.5, 10:6.0, 16:7.0, 25:9.0, 35:10.0,
+                       50:11.5, 70:13.5, 95:15.5, 120:17.0, 150:19.0, 185:21.0, 240:24.0, 300:27.0 };
+  const d = diametroExt[secao] || 30;
+  const areaCabos = ncond * Math.PI * d * d / 4;
+  const areaNecessaria = areaCabos / 0.40;  // 40% de ocupação para 3+ condutores
+  const diametroInterno = Math.sqrt(4 * areaNecessaria / Math.PI);
+  for (const e of ELETRODUTOS) {
+    if (e >= diametroInterno + 2) return e;  // +2mm folga parede
+  }
+  return ELETRODUTOS[ELETRODUTOS.length-1];
+}
+
+/* ============================================================
+   ESTADO E RENDERIZAÇÃO
+   ============================================================ */
+
+let circuitos = [];
+let contador = 1;
+
+function addCircuito() {
+  const id = document.getElementById('cId').value.trim() || ('C' + contador);
+  const c = {
+    id,
+    tipo: document.getElementById('cTipo').value,
+    potencia: parseFloat(document.getElementById('cPotencia').value),
+    fp: parseFloat(document.getElementById('cFp').value),
+    sistema: document.getElementById('cSistema').value,
+    comprimento: parseFloat(document.getElementById('cComprimento').value),
+    condutor: document.getElementById('cCondutor').value,
+    isolacao: document.getElementById('cIsolacao').value,
+    metodo: document.getElementById('cMetodo').value,
+    temp: parseFloat(document.getElementById('cTemp').value),
+    agrup: parseInt(document.getElementById('cAgrup').value),
+    quedaMax: parseFloat(document.getElementById('cQuedaMax').value)
+  };
+  if (!c.potencia || c.potencia <= 0) { alert('Informe a potência do circuito.'); return; }
+  circuitos.push(c);
+  contador++;
+  document.getElementById('cId').value = '';
+  document.getElementById('cPotencia').value = '1000';
+  renderizar();
+}
+
+function removerCircuito(idx) {
+  circuitos.splice(idx, 1);
+  renderizar();
+}
+
+function limparTudo() {
+  if (!confirm('Remover TODOS os circuitos?')) return;
+  circuitos = []; contador = 1;
+  renderizar();
+}
+
+function gerarMemoria(c, Ib, V, porCorrente, porQueda, secaoAdot, izFinal, dVperc, neutro, pe, disj, eletrod) {
+  const sistLabel = {mono:'Monofásico (F+N+T)', bif:'Bifásico (F+F+T)', bif3:'Bifásico (F+F+N+T)', trif:'Trifásico (3F+T)', trif4:'Trifásico (3F+N+T)'};
+  const ncond = numCondCarregados(c.sistema);
+  const rho = c.condutor === 'Cu' ? RHO_CU : RHO_AL;
+
+  let formulaIb;
+  if (c.sistema === 'trif' || c.sistema === 'trif4') {
+    formulaIb = `I<sub>B</sub> = P / (√3 × V<sub>FF</sub> × FP) = ${c.potencia} / (1,732 × ${V} × ${c.fp}) = <b>${Ib.toFixed(2)} A</b>`;
+  } else {
+    formulaIb = `I<sub>B</sub> = P / (V × FP) = ${c.potencia} / (${V} × ${c.fp}) = <b>${Ib.toFixed(2)} A</b>`;
+  }
+
+  let formulaDV;
+  if (c.sistema === 'trif' || c.sistema === 'trif4') {
+    formulaDV = `ΔV = √3 × I<sub>B</sub> × (ρ·L/S) × cosφ = 1,732 × ${Ib.toFixed(2)} × (${rho.toFixed(4)}×${c.comprimento}/${secaoAdot}) × ${c.fp}`;
+  } else {
+    formulaDV = `ΔV = 2 × I<sub>B</sub> × (ρ·L/S) × cosφ = 2 × ${Ib.toFixed(2)} × (${rho.toFixed(4)}×${c.comprimento}/${secaoAdot}) × ${c.fp}`;
+  }
+
+  const criterioVencedor = [];
+  if (porCorrente.secao === secaoAdot) criterioVencedor.push('capacidade de corrente');
+  if (porQueda.secao === secaoAdot) criterioVencedor.push('queda de tensão');
+  if (SECAO_MIN[c.tipo] === secaoAdot) criterioVencedor.push('seção mínima (Tab. 43)');
+  const criterio = criterioVencedor.join(' + ') || 'capacidade de corrente';
+
+  return `
+    <h4>📋 Memória de Cálculo — ${c.id}</h4>
+
+    <div class="passo"><b>Dados de entrada:</b> ${sistLabel[c.sistema]} | ${c.potencia} VA | FP = ${c.fp} |
+      L = ${c.comprimento} m | Cond.: ${c.condutor} | Isol.: ${c.isolacao} | Mét.: ${c.metodo} |
+      T<sub>amb</sub> = ${c.temp}°C | Agrupamento = ${c.agrup} circuito(s)</div>
+
+    <div class="passo"><b>① Corrente de projeto (item 6.2.5.2 / 4.2.1.2):</b><br>
+      <span class="formula">${formulaIb}</span>
+    </div>
+
+    <div class="passo"><b>② Fatores de correção:</b><br>
+      • FCT (Tabela 35 — temp. ${c.temp}°C, isol. ${c.isolacao}) = <b>${porCorrente.fct.toFixed(2)}</b><br>
+      • FCA (Tabela 37 — ${c.agrup} circuito(s) agrupados) = <b>${porCorrente.fca.toFixed(2)}</b>
+    </div>
+
+    <div class="passo"><b>③ Capacidade de condução requerida (item 6.2.5.2):</b><br>
+      <span class="formula">I'<sub>z</sub> = I<sub>B</sub> / (FCT × FCA) = ${Ib.toFixed(2)} / (${porCorrente.fct.toFixed(2)} × ${porCorrente.fca.toFixed(2)}) = <b>${porCorrente.izReq.toFixed(2)} A</b></span><br>
+      <span class="small">Buscando nas Tabelas 31-34 a primeira seção com I<sub>z</sub> ≥ ${porCorrente.izReq.toFixed(2)} A...</span><br>
+      → Seção por critério térmico: <b>${porCorrente.secao || 'não atende'} mm²</b> (I<sub>z</sub> = ${izFinal} A, ${ncond} cond. carregados)
+    </div>
+
+    <div class="passo"><b>④ Critério de queda de tensão (item 6.2.7 / Tabela 46):</b><br>
+      <span class="formula">${formulaDV}</span><br>
+      → Queda calculada para S = ${secaoAdot} mm²: <b class="${dVperc > c.quedaMax ? 'warn' : 'ok'}">${dVperc.toFixed(2)}%</b>
+      (limite = ${c.quedaMax}%)<br>
+      → Seção mínima por queda: <b>${porQueda.secao || 'não atende'} mm²</b>
+    </div>
+
+    <div class="passo"><b>⑤ Seção mínima (Tabela 43):</b>
+      ${c.tipo === 'ilum' ? '1,5 mm² (iluminação)' : '2,5 mm² (força/tomadas)'}
+    </div>
+
+    <div class="passo"><b>⑥ Condutor neutro (Tabela 44):</b>
+      ${neutro === '-' ? 'não aplicável (sem neutro)' : `<b>${neutro} mm²</b>`}
+    </div>
+
+    <div class="passo"><b>⑦ Condutor de proteção PE (item 6.4.3.1):</b>
+      <b>${pe} mm²</b> (S≤16: igual à fase | 16&lt;S≤35: 16 mm² | S&gt;35: S/2)
+    </div>
+
+    <div class="passo"><b>⑧ Disjuntor (item 5.3.4 — I<sub>B</sub> ≤ I<sub>N</sub> ≤ I<sub>Z</sub>):</b>
+      I<sub>B</sub> = ${Ib.toFixed(2)} A ≤ <b>${disj || '?'} A</b> ≤ ${(izFinal*porCorrente.fct*porCorrente.fca).toFixed(2)} A ✓
+    </div>
+
+    <div class="passo"><b>⑨ Eletroduto (item 6.2.11):</b>
+      Ø ≈ <b>${eletrod} mm</b> (taxa de ocupação 40% para ≥3 condutores)
+    </div>
+
+    <div class="conclusao">
+      <b>✅ CONCLUSÃO:</b> Seção adotada = <b style="font-size:14px;color:#0066cc">${secaoAdot} mm²</b>
+      — definida pelo critério de <b>${criterio}</b>.
+    </div>
+  `;
+}
+
+function renderizar() {
+  const tbody = document.getElementById('tbodyCircuitos');
+  if (circuitos.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="22" style="padding:24px;color:#888">Nenhum circuito adicionado.</td></tr>';
+    atualizarResumo([]);
+    document.getElementById('painelAlimentador').style.display = 'none';
+    return;
+  }
+
+  const tipoLabel = {ilum:'Ilum.', tug:'TUG', tue:'TUE', motor:'Motor', outro:'Outro'};
+  const sistLabel = {mono:'1F+N+T', bif:'2F+T', bif3:'2F+N+T', trif:'3F+T', trif4:'3F+N+T'};
+
+  let html = '';
+  const resultados = [];
+
+  circuitos.forEach((c, idx) => {
+    const {I: Ib, V} = calcularCorrente(c);
+    const porCorrente = dimensionarPorCorrente(c, Ib);
+    const porQueda = dimensionarPorQueda(c, Ib, V, c.quedaMax);
+
+    let secaoAdot = Math.max(
+      porCorrente.secao || 0,
+      porQueda.secao || 0,
+      SECAO_MIN[c.tipo]
+    );
+    if (!SECOES.includes(secaoAdot)) {
+      secaoAdot = SECOES.find(s => s >= secaoAdot) || SECOES[SECOES.length-1];
+    }
+
+    const ncond = numCondCarregados(c.sistema);
+    const izFinal = getAmpacidade(c.metodo, secaoAdot, c.isolacao, c.condutor, ncond);
+    const izCorrigido = izFinal * porCorrente.fct * porCorrente.fca;
+    const {dVperc} = calcularQuedaTensao(c, secaoAdot, Ib, V);
+    const neutro = (c.sistema === 'mono' || c.sistema === 'bif3' || c.sistema === 'trif4') ? secaoNeutro(secaoAdot) : '-';
+    const pe = secaoPE(secaoAdot);
+    const disj = escolherDisjuntor(Ib, izCorrigido);
+    const eletrod = escolherEletroduto(secaoAdot, ncond + (neutro !== '-' ? 1 : 0) + 1);
+
+    resultados.push({c, Ib, secaoAdot, neutro, pe, disj, dVperc, V});
+
+    const tagClass = 'tag-' + c.tipo;
+    const quedaClass = dVperc > c.quedaMax ? 'warn' : 'ok';
+    const memoriaHtml = gerarMemoria(c, Ib, V, porCorrente, porQueda, secaoAdot, izFinal, dVperc, neutro, pe, disj, eletrod)
+                          .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+
+    html += `<tr>
+      <td><b>${c.id}</b></td>
+      <td><span class="tag ${tagClass}">${tipoLabel[c.tipo]}</span></td>
+      <td>${c.potencia.toFixed(0)}</td>
+      <td>${c.fp.toFixed(2)}</td>
+      <td>${sistLabel[c.sistema]}</td>
+      <td>${V}</td>
+      <td>${Ib.toFixed(2)}</td>
+      <td>${c.comprimento}</td>
+      <td>${c.metodo}</td>
+      <td>${porCorrente.fct.toFixed(2)}</td>
+      <td>${porCorrente.fca.toFixed(2)}</td>
+      <td>${porCorrente.izReq.toFixed(1)}</td>
+      <td>${porCorrente.secao || '-'}</td>
+      <td>${porQueda.secao || '-'}</td>
+      <td><strong style="color:#0066cc">${secaoAdot}</strong></td>
+      <td>${neutro}</td>
+      <td>${pe}</td>
+      <td class="${quedaClass}">${dVperc.toFixed(2)}</td>
+      <td>${disj || '-'}</td>
+      <td>${eletrod}</td>
+      <td><button class="btn-memoria" onclick="toggleMemoria(${idx})">📋 Ver</button></td>
+      <td class="no-print"><button class="btn btn-danger" style="padding:3px 8px" onclick="removerCircuito(${idx})">✕</button></td>
+    </tr>
+    <tr class="memoria-row" id="mem-${idx}" style="display:none">
+      <td colspan="22">${gerarMemoria(c, Ib, V, porCorrente, porQueda, secaoAdot, izFinal, dVperc, neutro, pe, disj, eletrod)}</td>
+    </tr>`;
+  });
+
+  tbody.innerHTML = html;
+  atualizarResumo(resultados);
+  dimensionarAlimentador(resultados);
+}
+
+function toggleMemoria(idx) {
+  const el = document.getElementById('mem-' + idx);
+  el.style.display = el.style.display === 'none' ? 'table-row' : 'none';
+}
+
+function dimensionarAlimentador(resultados) {
+  if (resultados.length === 0) {
+    document.getElementById('painelAlimentador').style.display = 'none';
+    return;
+  }
+
+  const a = {
+    comprimento: parseFloat(document.getElementById('aComprimento').value),
+    sistema:     document.getElementById('aSistema').value,
+    condutor:    document.getElementById('aCondutor').value,
+    isolacao:    document.getElementById('aIsolacao').value,
+    metodo:      document.getElementById('aMetodo').value,
+    temp:        parseFloat(document.getElementById('aTemp').value),
+    quedaMax:    parseFloat(document.getElementById('aQuedaMax').value),
+    fp:          parseFloat(document.getElementById('aFp').value),
+    fdItug:      parseFloat(document.getElementById('aFdItug').value),
+    fdTue:       parseFloat(document.getElementById('aFdTue').value),
+    fdMotor:     parseFloat(document.getElementById('aFdMotor').value),
+    tipo: 'outro',
+    agrup: 1
+  };
+
+  // Calcula potências por categoria com fatores de demanda
+  let pItug = 0, pTue = 0, pMotor = 0, pOutro = 0;
+  resultados.forEach(r => {
+    const p = r.c.potencia;
+    if (r.c.tipo === 'ilum' || r.c.tipo === 'tug') pItug += p;
+    else if (r.c.tipo === 'tue') pTue += p;
+    else if (r.c.tipo === 'motor') pMotor += p;
+    else pOutro += p;
+  });
+
+  const pDemanda = pItug * a.fdItug + pTue * a.fdTue + pMotor * a.fdMotor + pOutro;
+  const V = (a.sistema === 'mono') ? parseFloat(document.getElementById('tensaoFN').value)
+                                   : parseFloat(document.getElementById('tensaoFF').value);
+  let Ib;
+  if (a.sistema === 'trif' || a.sistema === 'trif4') {
+    Ib = pDemanda / (Math.sqrt(3) * V * a.fp);
+  } else {
+    Ib = pDemanda / (V * a.fp);
+  }
+
+  a.potencia = pDemanda;
+  a.fp_val = a.fp;
+  const cAlim = {...a, fp: a.fp};
+
+  const porCorrente = dimensionarPorCorrente(cAlim, Ib);
+  const porQueda = dimensionarPorQueda(cAlim, Ib, V, a.quedaMax);
+
+  let secaoAdot = Math.max(porCorrente.secao || 0, porQueda.secao || 0, 10);
+  if (!SECOES.includes(secaoAdot)) {
+    secaoAdot = SECOES.find(s => s >= secaoAdot) || SECOES[SECOES.length-1];
+  }
+
+  const ncond = numCondCarregados(a.sistema);
+  const izFinal = getAmpacidade(a.metodo, secaoAdot, a.isolacao, a.condutor, ncond);
+  const izCorrigido = izFinal * porCorrente.fct * porCorrente.fca;
+  const {dVperc} = calcularQuedaTensao(cAlim, secaoAdot, Ib, V);
+  const neutro = (a.sistema === 'mono' || a.sistema === 'bif3' || a.sistema === 'trif4') ? secaoNeutro(secaoAdot) : '-';
+  const pe = secaoPE(secaoAdot);
+  const disj = escolherDisjuntor(Ib, izCorrigido);
+  const eletrod = escolherEletroduto(secaoAdot, ncond + (neutro !== '-' ? 1 : 0) + 1);
+
+  const sistLabel = {mono:'Monofásico (F+N+T)', bif:'Bifásico (F+F+T)', bif3:'Bifásico (F+F+N+T)', trif:'Trifásico (3F+T)', trif4:'Trifásico (3F+N+T)'};
+  const rho = a.condutor === 'Cu' ? RHO_CU : RHO_AL;
+
+  let formulaIb;
+  if (a.sistema === 'trif' || a.sistema === 'trif4') {
+    formulaIb = `I<sub>B</sub> = P<sub>dem</sub> / (√3 × V<sub>FF</sub> × FP) = ${pDemanda.toFixed(0)} / (1,732 × ${V} × ${a.fp}) = <b>${Ib.toFixed(2)} A</b>`;
+  } else {
+    formulaIb = `I<sub>B</sub> = P<sub>dem</sub> / (V × FP) = ${pDemanda.toFixed(0)} / (${V} × ${a.fp}) = <b>${Ib.toFixed(2)} A</b>`;
+  }
+
+  const criterioVencedor = [];
+  if (porCorrente.secao === secaoAdot) criterioVencedor.push('capacidade de corrente');
+  if (porQueda.secao === secaoAdot) criterioVencedor.push('queda de tensão');
+  const criterio = criterioVencedor.join(' + ') || 'capacidade de corrente';
+
+  const memoria = `
+    <div class="memoria-row" style="background:#fff8e1;border-left:5px solid #ff9800;padding:14px 20px;border-radius:6px">
+    <h4>🔌 Cabo Alimentador (Entrada do Quadro)</h4>
+
+    <div class="passo"><b>Dados:</b> ${sistLabel[a.sistema]} | L = ${a.comprimento} m | Cond.: ${a.condutor} |
+      Isol.: ${a.isolacao} | Mét.: ${a.metodo} | T<sub>amb</sub> = ${a.temp}°C | FP médio = ${a.fp}</div>
+
+    <div class="passo"><b>① Cálculo da Demanda (item 4.2.1.1 / 4.2.1.2 da NBR 5410):</b><br>
+      • Iluminação + TUG: ${pItug.toFixed(0)} VA × FD ${a.fdItug} = <b>${(pItug*a.fdItug).toFixed(0)} VA</b><br>
+      • TUE: ${pTue.toFixed(0)} VA × FD ${a.fdTue} = <b>${(pTue*a.fdTue).toFixed(0)} VA</b><br>
+      • Motores: ${pMotor.toFixed(0)} VA × FD ${a.fdMotor} = <b>${(pMotor*a.fdMotor).toFixed(0)} VA</b><br>
+      • Outros: ${pOutro.toFixed(0)} VA × 1,00 = <b>${pOutro.toFixed(0)} VA</b><br>
+      <b>P<sub>demanda</sub> = ${pDemanda.toFixed(0)} VA</b>
+    </div>
+
+    <div class="passo"><b>② Corrente de projeto:</b><br>
+      <span class="formula">${formulaIb}</span>
+    </div>
+
+    <div class="passo"><b>③ Fatores de correção:</b>
+      FCT = <b>${porCorrente.fct.toFixed(2)}</b> (Tab. 35) | FCA = <b>${porCorrente.fca.toFixed(2)}</b> (alimentador isolado)
+    </div>
+
+    <div class="passo"><b>④ Capacidade requerida:</b>
+      <span class="formula">I'<sub>z</sub> = ${Ib.toFixed(2)} / (${porCorrente.fct.toFixed(2)} × ${porCorrente.fca.toFixed(2)}) = <b>${porCorrente.izReq.toFixed(2)} A</b></span><br>
+      → Por critério térmico (Tab. 31-34): <b>${porCorrente.secao} mm²</b> (I<sub>z</sub> = ${izFinal} A)
+    </div>
+
+    <div class="passo"><b>⑤ Critério de queda de tensão (Tabela 46, limite ${a.quedaMax}%):</b>
+      ΔV calculada para S = ${secaoAdot} mm²: <b class="${dVperc > a.quedaMax ? 'warn' : 'ok'}">${dVperc.toFixed(2)}%</b><br>
+      → Por critério de queda: <b>${porQueda.secao || 'não atende'} mm²</b>
+    </div>
+
+    <div class="passo"><b>⑥ Neutro:</b> ${neutro === '-' ? 'não aplicável' : neutro+' mm² (Tab. 44)'} |
+      <b>PE:</b> ${pe} mm² | <b>Disjuntor:</b> ${disj} A | <b>Eletroduto:</b> Ø ${eletrod} mm
+    </div>
+
+    <div class="conclusao">
+      <b>✅ ALIMENTADOR:</b> Cabo <b style="font-size:14px;color:#0066cc">${secaoAdot} mm² (${a.condutor}/${a.isolacao})</b>
+      + Neutro ${neutro} mm² + PE ${pe} mm² | Disjuntor geral <b>${disj} A</b> | Eletroduto Ø ${eletrod} mm
+      — definido pelo critério de <b>${criterio}</b>.
+    </div>
+    </div>
+  `;
+
+  document.getElementById('painelAlimentador').style.display = 'block';
+  document.getElementById('memoriaAlimentador').innerHTML = memoria;
+
+  // armazena pra resumo
+  window.__alimentador = {secaoAdot, disj, pDemanda, Ib, neutro, pe};
+}
+
+function atualizarResumo(resultados) {
+  const totalVA = resultados.reduce((s,r) => s + r.c.potencia, 0);
+  const totalW = resultados.reduce((s,r) => s + r.c.potencia * r.c.fp, 0);
+
+  document.getElementById('rTotalVA').textContent = totalVA.toFixed(0) + ' VA';
+  document.getElementById('rTotalW').textContent = totalW.toFixed(0) + ' W';
+  document.getElementById('rNum').textContent = resultados.length;
+
+  // dados do alimentador serão atualizados após dimensionarAlimentador()
+  setTimeout(() => {
+    const a = window.__alimentador;
+    if (a) {
+      document.getElementById('rDemanda').textContent = a.pDemanda.toFixed(0) + ' VA';
+      document.getElementById('rIDemanda').textContent = a.Ib.toFixed(2) + ' A';
+      document.getElementById('rDjGeral').textContent = a.disj ? a.disj + ' A' : '-';
+      document.getElementById('rAlim').textContent = a.secaoAdot + ' mm² (Cu) + N:' + a.neutro + ' + PE:' + a.pe;
+    } else {
+      document.getElementById('rDemanda').textContent = '-';
+      document.getElementById('rIDemanda').textContent = '-';
+      document.getElementById('rDjGeral').textContent = '-';
+      document.getElementById('rAlim').textContent = '-';
+    }
+  }, 0);
+}
+
+function preencherExemplo() {
+  circuitos = [
+    {id:'C1 - Iluminação Sala/Quartos', tipo:'ilum', potencia:680, fp:1.0, sistema:'mono', comprimento:18, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:2, quedaMax:4},
+    {id:'C2 - Iluminação Cozinha/Banho', tipo:'ilum', potencia:420, fp:1.0, sistema:'mono', comprimento:14, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:2, quedaMax:4},
+    {id:'C3 - TUG Quartos/Sala', tipo:'tug', potencia:1500, fp:0.92, sistema:'mono', comprimento:20, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:3, quedaMax:4},
+    {id:'C4 - TUG Cozinha/Área', tipo:'tug', potencia:2400, fp:0.92, sistema:'mono', comprimento:12, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:3, quedaMax:4},
+    {id:'C5 - TUE Chuveiro', tipo:'tue', potencia:5500, fp:1.0, sistema:'bif', comprimento:8, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:1, quedaMax:4},
+    {id:'C6 - TUE Ar Cond. Quarto', tipo:'tue', potencia:1800, fp:0.85, sistema:'mono', comprimento:15, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:1, quedaMax:4},
+    {id:'C7 - TUE Forno Elétrico', tipo:'tue', potencia:3500, fp:1.0, sistema:'bif', comprimento:10, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:1, quedaMax:4},
+    {id:'C8 - TUE Máq. Lavar', tipo:'tue', potencia:1500, fp:0.85, sistema:'mono', comprimento:13, condutor:'Cu', isolacao:'PVC', metodo:'B1', temp:30, agrup:2, quedaMax:4}
+  ];
+  contador = 9;
+  renderizar();
+}
+
+function exportarCSV() {
+  if (circuitos.length === 0) { alert('Nenhum circuito para exportar.'); return; }
+  const sistLabel = {mono:'1F+N+T', bif:'2F+T', bif3:'2F+N+T', trif:'3F+T', trif4:'3F+N+T'};
+  const tipoLabel = {ilum:'Iluminação', tug:'TUG', tue:'TUE', motor:'Motor', outro:'Outro'};
+
+  let csv = 'Circuito;Tipo;Potencia_VA;FP;Sistema;Tensao_V;Ib_A;Comprimento_m;Metodo;FCT;FCA;Iz_req_A;Secao_mm2;Neutro_mm2;PE_mm2;Queda_%;Disjuntor_A;Eletroduto_mm\n';
+
+  circuitos.forEach(c => {
+    const {I: Ib, V} = calcularCorrente(c);
+    const porCorr = dimensionarPorCorrente(c, Ib);
+    const porQ = dimensionarPorQueda(c, Ib, V, c.quedaMax);
+    let secaoAdot = Math.max(porCorr.secao || 0, porQ.secao || 0, SECAO_MIN[c.tipo]);
+    if (!SECOES.includes(secaoAdot)) secaoAdot = SECOES.find(s => s >= secaoAdot) || 240;
+    const ncond = numCondCarregados(c.sistema);
+    const izFinal = getAmpacidade(c.metodo, secaoAdot, c.isolacao, c.condutor, ncond);
+    const izCorr = izFinal * porCorr.fct * porCorr.fca;
+    const {dVperc} = calcularQuedaTensao(c, secaoAdot, Ib, V);
+    const neutro = (c.sistema === 'mono' || c.sistema === 'bif3' || c.sistema === 'trif4') ? secaoNeutro(secaoAdot) : '-';
+    const pe = secaoPE(secaoAdot);
+    const disj = escolherDisjuntor(Ib, izCorr);
+    const eletrod = escolherEletroduto(secaoAdot, ncond + (neutro !== '-' ? 1 : 0) + 1);
+
+    csv += `${c.id};${tipoLabel[c.tipo]};${c.potencia};${c.fp};${sistLabel[c.sistema]};${V};${Ib.toFixed(2)};${c.comprimento};${c.metodo};${porCorr.fct.toFixed(2)};${porCorr.fca.toFixed(2)};${porCorr.izReq.toFixed(1)};${secaoAdot};${neutro};${pe};${dVperc.toFixed(2)};${disj || '-'};${eletrod}\n`;
+  });
+
+  const blob = new Blob(['﻿' + csv], {type: 'text/csv;charset=utf-8;'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'quadro_de_carga.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Inicializa
+renderizar();
+</script>
+</body>
+</html>
