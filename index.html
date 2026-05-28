@@ -943,12 +943,46 @@ function dimensionarAlimentador(resultados) {
   }
 
   const ncond = numCondCarregados(a.sistema);
-  const izFinal = getAmpacidade(a.metodo, secaoAdot, a.isolacao, a.condutor, ncond);
-  const izCorrigido = izFinal * porCorrente.fct * porCorrente.fca;
+  let izFinal = getAmpacidade(a.metodo, secaoAdot, a.isolacao, a.condutor, ncond);
+  let izCorrigido = izFinal * porCorrente.fct * porCorrente.fca;
+  let disj = escolherDisjuntor(Ib, izCorrigido);
+
+  // ============================================================
+  // REGRA DE COORDENAÇÃO (NBR 5410 item 5.3.5 / seletividade):
+  // Disjuntor geral NUNCA pode ser menor que o maior disjuntor parcial
+  // ============================================================
+  const maxDisjParcial = Math.max(0, ...resultados.map(r => r.disj || 0));
+  let regraCoordenacaoAplicada = false;
+  let disjOriginal = disj;
+  let secaoOriginal = secaoAdot;
+
+  if (disj && maxDisjParcial > 0 && disj < maxDisjParcial) {
+    regraCoordenacaoAplicada = true;
+    // Procura o próximo disjuntor padronizado >= maior parcial
+    const novoDisj = DISJUNTORES.find(d => d >= maxDisjParcial);
+    if (novoDisj) {
+      disj = novoDisj;
+      // Se a seção atual não suporta o novo disjuntor (Iz < In), aumenta a seção
+      if (izCorrigido < novoDisj) {
+        for (const s of SECOES) {
+          if (s < secaoAdot) continue;
+          const izTeste = getAmpacidade(a.metodo, s, a.isolacao, a.condutor, ncond);
+          if (!izTeste) continue;
+          const izCorrTeste = izTeste * porCorrente.fct * porCorrente.fca;
+          if (izCorrTeste >= novoDisj) {
+            secaoAdot = s;
+            izFinal = izTeste;
+            izCorrigido = izCorrTeste;
+            break;
+          }
+        }
+      }
+    }
+  }
+
   const {dVperc} = calcularQuedaTensao(cAlim, secaoAdot, Ib, V);
   const neutro = (a.sistema === 'mono' || a.sistema === 'bif3' || a.sistema === 'trif4') ? secaoNeutro(secaoAdot) : '-';
   const pe = secaoPE(secaoAdot);
-  const disj = escolherDisjuntor(Ib, izCorrigido);
   const eletrod = escolherEletroduto(secaoAdot, ncond + (neutro !== '-' ? 1 : 0) + 1);
 
   const sistLabel = {mono:'Monofásico (F+N+T)', bif:'Bifásico (F+F+T)', bif3:'Bifásico (F+F+N+T)', trif:'Trifásico (3F+T)', trif4:'Trifásico (3F+N+T)'};
@@ -1000,13 +1034,24 @@ function dimensionarAlimentador(resultados) {
     </div>
 
     <div class="passo"><b>⑥ Neutro:</b> ${neutro === '-' ? 'não aplicável' : neutro+' mm² (Tab. 44)'} |
-      <b>PE:</b> ${pe} mm² | <b>Disjuntor:</b> ${disj} A | <b>Eletroduto:</b> Ø ${eletrod} mm
+      <b>PE:</b> ${pe} mm² | <b>Eletroduto:</b> Ø ${eletrod} mm
+    </div>
+
+    <div class="passo"><b>⑦ Disjuntor geral — Regra de coordenação (NBR 5410 item 5.3.5):</b><br>
+      • Maior disjuntor parcial entre os circuitos: <b>${maxDisjParcial} A</b><br>
+      • Disjuntor pelo critério Iᵦ ≤ Iₙ ≤ I<sub>Z</sub>: <b>${disjOriginal} A</b><br>
+      ${regraCoordenacaoAplicada
+        ? `<b class="warn">⚠ Regra aplicada:</b> disjuntor original (${disjOriginal} A) era menor que o maior parcial (${maxDisjParcial} A).
+           Adotado disjuntor de <b>${disj} A</b>${secaoAdot !== secaoOriginal
+              ? ` e seção do cabo aumentada de ${secaoOriginal} mm² para <b>${secaoAdot} mm²</b> para atender Iz ≥ In.`
+              : '.'}`
+        : `<b class="ok">✓ Coordenação OK:</b> disjuntor geral (${disj} A) ≥ maior disjuntor parcial (${maxDisjParcial} A).`}
     </div>
 
     <div class="conclusao">
       <b>✅ ALIMENTADOR:</b> Cabo <b style="font-size:14px;color:#0066cc">${secaoAdot} mm² (${a.condutor}/${a.isolacao})</b>
       + Neutro ${neutro} mm² + PE ${pe} mm² | Disjuntor geral <b>${disj} A</b> | Eletroduto Ø ${eletrod} mm
-      — definido pelo critério de <b>${criterio}</b>.
+      — definido pelo critério de <b>${criterio}</b>${regraCoordenacaoAplicada ? ' + <b>regra de coordenação com parciais</b>' : ''}.
     </div>
     </div>
   `;
